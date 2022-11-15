@@ -6,13 +6,12 @@ from django.forms.models import model_to_dict
 from products.models import Product
 from products.serializers import ProductSerializer
 
-@api_view(["GET"])
+@api_view(["POST"])
 def api_home(request, *args, **kwargs):
     """DRF API VIEW"""
-    data = {}
-    instance = Product.objects.all().order_by("?").first()
-
-    if instance:
-        # data = model_to_dict(instance, fields=['content', 'id'])
-        data = ProductSerializer(instance).data
-    return Response(data)
+    serializer = ProductSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        # To save data sent through 'POST' to the db
+            # instance = serializer.save()
+        print(serializer.data)
+        return Response(serializer.data)
