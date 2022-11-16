@@ -15,8 +15,14 @@ class ProductCreateAPIView(generics.CreateAPIView):
             content = f'This is {title}.'
         serializer.save(content=content)
 
-        
+
 class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # lookup = 'pk'
+
+
+class ProductListAPIView(generics.ListAPIView):
+    """Listing instances along"""
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
