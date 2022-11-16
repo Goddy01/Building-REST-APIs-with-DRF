@@ -57,6 +57,10 @@ def product_alt_view(request, pk=None, *args, **kwargs):
     elif request.method == 'GET': # Could either be a detail or list request
         if pk is not None: # Checking if pk is present, if so, it means it is a product detail request
             obj = get_object_or_404(Product, pk=pk)
-            serializer = ProductSerializer(obj, many=False).data
-            return Response(serializer)
+            data = ProductSerializer(data=obj, many=False).data
+            return Response(data)
         
+        # If no pk is present, then it means it is a list request
+        qs = Product.objects.all()
+        data = ProductSerializer(data=qs, many=True).data
+        return Response(data)
