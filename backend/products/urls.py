@@ -7,6 +7,7 @@ urlpatterns = [
     path('create/', views.ProductCreateAPIView.as_view()),
     path('list/', views.ProductListAPIView.as_view()),
     path('<int:pk>/', views.ProductDetailAPIView.as_view()),
+    path('<int:pk>/update/', views.ProductUpdateAPIView.as_view()),
     
     # for the func-based API View product_alt_view
     path('2/create/', views.product_alt_view),
