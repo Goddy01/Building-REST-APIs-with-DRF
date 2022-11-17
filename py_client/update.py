@@ -1,10 +1,9 @@
 import requests
 
-endpoint = 'http://localhost:8000/api/products/1/update/'
+endpoint = 'http://localhost:8000/api/products/mixins/1/update/'
 
 data = {
-    'title': 'This is amazing',
-    'content': 'This is item 2'
+    'title': 'Mixins',
 }
-get_response = requests.put(endpoint, json=data)
+get_response = requests.patch(endpoint, json=data)
 print(get_response.json())

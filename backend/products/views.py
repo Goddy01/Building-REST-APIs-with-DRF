@@ -59,7 +59,7 @@ class ProductDeleteAPIView(generics.DestroyAPIView):
         # Whatever logic necessary
         return super().perform_destroy(instance)
 
-class ProductMixinView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, generics.GenericAPIView):
+class ProductMixinView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, generics.GenericAPIView):
     """
     Mixins are classes that contan combination of methods from other classes. They inherit from other classes
     """
@@ -81,6 +81,18 @@ class ProductMixinView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
         """Runs when creating a new instance"""
         if not serializer.validated_data.get('content'):
             serializer.save(content='Mixins are amazing')
+
+    def patch(self, request, *args, **kwargs):
+        """The method for partial_update of an instance, which means all the fields for the update will be optional"""
+        print(f'ARGS: {args}, KWARGS: {kwargs}')
+        kwargs['partial'] = True
+        return self.partial_update(request, *args, **kwargs)
+
+    def perform_update(self, serializer):
+        """Runs when updating an existing instance"""
+        instance = serializer.save()
+        # if not instance.content:
+        instance.content = 'Mixins sure are amazing'
 
 @api_view(['GET', 'POST'])
 def product_alt_view(request, pk=None, *args, **kwargs):
