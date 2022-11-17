@@ -8,7 +8,7 @@ except:
     product_id = None
 else:
     if product_id:
-        endpoint = f'http://localhost:8000/api/products/{product_id}/delete'
+        endpoint = f'http://localhost:8000/api/products/mixins/{product_id}/delete/'
 
-    get_response = requests.delete(endpoint)
-    print(get_response, get_response.status_code==204)
+        get_response = requests.delete(endpoint)
+        print(get_response, get_response.status_code==204)
