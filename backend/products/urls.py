@@ -14,4 +14,8 @@ urlpatterns = [
     path('2/create/', views.product_alt_view),
     path('2/list/', views.product_alt_view),
     path('2/<int:pk>/', views.product_alt_view),
+
+    # for mixins
+    path('mixins/list/', views.ProductMixinView.as_view()),
+    path('mixins/<int:pk>/detail/', views.ProductMixinView.as_view()),
 ]
