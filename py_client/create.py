@@ -1,6 +1,6 @@
 import requests
 
-endpoint = 'http://localhost:8000/api/products/mixins/create/'
+endpoint = 'http://localhost:8000/api/products/create/'
 
 data = {'title': 'Sunday'}
 get_response = requests.post(endpoint, json=data)

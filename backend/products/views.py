@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins
+from rest_framework import authentication, generics, mixins, permissions
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.decorators import api_view, action
@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404
 class ProductCreateAPIView(generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         """This func will run upon the creation of an instance"""
@@ -21,6 +23,9 @@ class ProductCreateAPIView(generics.CreateAPIView):
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         content = serializer.validated_data.get('content')
