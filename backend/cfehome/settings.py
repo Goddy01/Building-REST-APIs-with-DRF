@@ -55,16 +55,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "cfehome.urls"
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
-#     ],
-
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#     'rest_framework.authentication.SessionAuthentication',
-#     ],
-# }
-
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -129,3 +119,14 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+    'rest_framework.authentication.SessionAuthentication',
+    'api.authentication.TokenAuthentication',
+    ],
+    
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly' # Only allows a GET request
+    ],
+}
