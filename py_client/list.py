@@ -1,6 +1,21 @@
 import requests
+from getpass import getpass
 
-endpoint = 'http://localhost:8000/api/products/list/'
+auth_endpoint = 'http://localhost:8000/api/auth/'
 
-get_response = requests.get(endpoint)
-print(get_response.json())
+username = input('Username: ')
+password = getpass()
+get_auth_response = requests.post(auth_endpoint, json={'username': username, 'password': password})
+# print(get_auth_response.json())
+
+if get_auth_response.status_code == 200:
+    token = get_auth_response.json()['token']
+    headers = {
+        'Authorization': f'Token {token}'
+    }
+    endpoint = 'http://localhost:8000/api/products/list/'
+
+    get_response = requests.get(endpoint, headers=headers)
+    print(get_response.json())
+else:
+    print('Wrong login details provided!!!')
