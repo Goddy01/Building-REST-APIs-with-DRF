@@ -11,7 +11,7 @@ get_auth_response = requests.post(auth_endpoint, json={'username': username, 'pa
 if get_auth_response.status_code == 200:
     token = get_auth_response.json()['token']
     headers = {
-        'Authorization': f'Token {token}'
+        'Authorization': f'Bearer {token}'
     }
     endpoint = 'http://localhost:8000/api/products/list/'
 
