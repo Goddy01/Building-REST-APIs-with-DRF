@@ -1,4 +1,5 @@
 from rest_framework import authentication, generics, mixins, permissions
+from .permissions import IsStaffEditorPermission
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.decorators import api_view, action
@@ -25,7 +26,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
 
     authentication_classes = [authentication.SessionAuthentication]
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [IsStaffEditorPermission]
 
     def perform_create(self, serializer):
         content = serializer.validated_data.get('content')
@@ -50,7 +51,7 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
     serializer_class = ProductSerializer
     lookup_field = 'pk'
 
-    permission_classes = [permissions.DjangoModelPermissions]
+    permission_classes = [IsStaffEditorPermission]
 
     def perform_update(self, serializer):
         instance = serializer.save()
