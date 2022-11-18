@@ -54,15 +54,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "cfehome.urls"
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
-    ],
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+#     ],
 
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-    'rest_framework.authentication.SessionAuthentication',
-    ],
-}
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#     'rest_framework.authentication.SessionAuthentication',
+#     ],
+# }
 
 TEMPLATES = [
     {
