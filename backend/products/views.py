@@ -1,17 +1,16 @@
-from rest_framework import authentication, generics, mixins, permissions
-from api.authentication import TokenAuthentication
-from .permissions import IsStaffEditorPermission
+from rest_framework import authentication, generics, mixins
+from api.mixins import IsStaffEditorPermissionMixin
 from .models import Product
 from .serializers import ProductSerializer
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
-class ProductCreateAPIView(generics.CreateAPIView):
+class ProductCreateAPIView(IsStaffEditorPermissionMixin, generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     authentication_classes = [authentication.SessionAuthentication]
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         """This func will run upon the creation of an instance"""
@@ -22,10 +21,10 @@ class ProductCreateAPIView(generics.CreateAPIView):
         serializer.save(content=content)
 
 
-class ProductListCreateAPIView(generics.ListCreateAPIView):
+class ProductListCreateAPIView(IsStaffEditorPermissionMixin, generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
+    # permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
     def perform_create(self, serializer):
         content = serializer.validated_data.get('content')
@@ -33,31 +32,31 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
             serializer.save(content=None)
 
 
-class ProductDetailAPIView(generics.RetrieveAPIView):
+class ProductDetailAPIView(IsStaffEditorPermissionMixin, generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # lookup = 'pk'
 
 
-class ProductListAPIView(generics.ListAPIView):
+class ProductListAPIView(IsStaffEditorPermissionMixin, generics.ListAPIView):
     """Listing instances along"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 
-class ProductUpdateAPIView(generics.UpdateAPIView):
+class ProductUpdateAPIView(IsStaffEditorPermissionMixin, generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
 
-    permission_classes = [IsStaffEditorPermission]
+    # permission_classes = [IsStaffEditorPermission]
 
     def perform_update(self, serializer):
         instance = serializer.save()
         if not instance.content:
             instance.content = instance.title
 
-class ProductDeleteAPIView(generics.DestroyAPIView):
+class ProductDeleteAPIView(IsStaffEditorPermissionMixin, generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
