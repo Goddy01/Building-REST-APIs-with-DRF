@@ -15,10 +15,17 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['pk', 'url', 'edit_url', 'email', 'title', 'content', 'price', 'sale_price', 'my_discount']
 
-    # def create(self, validated_data):
-    #     email = validated_data.pop('email')
-    #     print(email)
-    #     return super().create(validated_data)
+    # Custom Validation wih Serializer (1)
+    def validate_title(self, value):
+        obj = Product.objects.filter(title__iexact=value)
+        if obj.exists():
+            return serializers.ValidationError(f"'{value}' is already a product name.")
+        return value
+    
+    def create(self, validated_data):
+        email = validated_data.pop('email')
+        print(email)
+        return super().create(validated_data)
 
     # def update(self, instance, validated_data):
     #     email = validated_data.pop('email')
