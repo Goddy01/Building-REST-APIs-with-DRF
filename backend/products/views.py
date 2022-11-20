@@ -74,40 +74,43 @@ class ProductMixinView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Re
     lookup_field = 'pk'
 
     def get(self, request, *args, **kwargs):
-        """The method for list/retrieve mixins"""
+        """The method to list/retrieve products"""
         pk = kwargs.get('pk')
         if pk is not None:
+            # Retrieve -> Product Detail
             return self.retrieve(request, *args, **kwargs)
+        # List Products
         return self.list(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
-        """The method for create/update mixins"""
+        """The method to create products"""
         return self.create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        """Runs when creating a new instance"""
+        """Runs when creating a new product"""
         if not serializer.validated_data.get('content'):
             serializer.save(content='Mixins are amazing')
 
     def patch(self, request, *args, **kwargs):
-        """The method for partial_update of an instance, which means all the fields for the update will be optional"""
+        """The method for partial_update of a product, which means all the fields of the Product model will be optional"""
         print(f'ARGS: {args}, KWARGS: {kwargs}')
         kwargs['partial'] = True
         return self.partial_update(request, *args, **kwargs)
 
     def perform_update(self, serializer):
-        """Runs when updating an existing instance"""
+        """Runs when updating an existing product"""
         instance = serializer.save()
         # if not instance.content:
         instance.content = 'Mixins sure are amazing'
 
     def delete(self, request, *args, **kwargs):
+        """The method to delete products"""
         return self.destroy(request, *args, **kwargs)
 
 
 @api_view(['GET', 'POST'])
 def product_alt_view(request, pk=None, *args, **kwargs):
-    if request.method == 'POST': # Could either be a create or update request
+    if request.method == 'POST': # A request to create a product
         data = request.data
         serializer = ProductSerializer(data=data, many=False)
         if serializer.is_valid():
