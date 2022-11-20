@@ -1,6 +1,6 @@
 from .models import Product
 from .serializers import ProductSerializer
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 
 
 class ProductViewset(viewsets.ModelViewSet):
@@ -13,6 +13,20 @@ class ProductViewset(viewsets.ModelViewSet):
     DELETE -> DESTROY
     """
     
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'pk'
+
+
+class ProductGenericViewSet(
+        mixins.ListModelMixin, 
+        mixins.RetrieveModelMixin, 
+        viewsets.GenericViewSet
+                                ):
+    """
+    GET -> LIST
+    GET -> RETRIEVE -> DETAIL
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
