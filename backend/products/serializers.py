@@ -4,6 +4,7 @@ from .models import Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(write_only=True)
     my_discount = serializers.SerializerMethodField(read_only=True)
     edit_url = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(
@@ -12,7 +13,12 @@ class ProductSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Product
-        fields = ['pk', 'url', 'edit_url', 'title', 'content', 'price', 'sale_price', 'my_discount']
+        fields = ['pk', 'url', 'edit_url', 'email', 'title', 'content', 'price', 'sale_price', 'my_discount']
+
+    def create(self, validated_data):
+        email = validated_data.pop('email')
+        print(email)
+        return super().create(validated_data)
 
     def get_edit_url(self, obj):
         request = self.context.get('request')
