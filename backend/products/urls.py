@@ -5,9 +5,10 @@ urlpatterns = [
     # for the class based API Views
     path('', views.ProductListCreateAPIView.as_view()),
     path('create/', views.ProductCreateAPIView.as_view()),
-    path('list/', views.ProductListAPIView.as_view()),
-    path('<int:pk>/', views.ProductDetailAPIView.as_view()),
-    path('<int:pk>/update/', views.ProductUpdateAPIView.as_view()),
+    path('list/', views.ProductListAPIView.as_view(), name=
+    'product-list'),
+    path('<int:pk>/', views.ProductDetailAPIView.as_view(), name='product-detail'),
+    path('<int:pk>/update/', views.ProductUpdateAPIView.as_view(), name='product-edit'),
     path('<int:pk>/delete/', views.ProductDeleteAPIView.as_view()),
     
     # for the func-based API View product_alt_view
