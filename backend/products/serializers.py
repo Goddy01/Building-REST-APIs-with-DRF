@@ -15,10 +15,10 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['pk', 'url', 'edit_url', 'email', 'title', 'content', 'price', 'sale_price', 'my_discount']
 
-    def create(self, validated_data):
-        email = validated_data.pop('email')
-        print(email)
-        return super().create(validated_data)
+    # def create(self, validated_data):
+    #     email = validated_data.pop('email')
+    #     print(email)
+    #     return super().create(validated_data)
 
     def get_edit_url(self, obj):
         request = self.context.get('request')
