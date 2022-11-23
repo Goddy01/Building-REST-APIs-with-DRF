@@ -33,6 +33,14 @@ class ProductListCreateAPIView(IsStaffEditorPermissionMixin, generics.ListCreate
             content = title
         serializer.save(content=title)
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        request = self.request
+        user = request.user
+        if not user.is_authenticated:
+            return Product.objects.none
+        return qs.filter(user=user)
+
 
 class ProductDetailAPIView(IsStaffEditorPermissionMixin, generics.RetrieveAPIView):
     queryset = Product.objects.all()
