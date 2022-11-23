@@ -1,12 +1,12 @@
 from rest_framework import authentication, generics, mixins
-from api.mixins import IsStaffEditorPermissionMixin
+from api.mixins import IsStaffEditorPermissionMixin, UserQuerySetMixin
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
-class ProductCreateAPIView(IsStaffEditorPermissionMixin, generics.CreateAPIView):
+class ProductCreateAPIView(UserQuerySetMixin, IsStaffEditorPermissionMixin, generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     authentication_classes = [authentication.SessionAuthentication]
@@ -21,7 +21,7 @@ class ProductCreateAPIView(IsStaffEditorPermissionMixin, generics.CreateAPIView)
         serializer.save(content=content)
 
 
-class ProductListCreateAPIView(IsStaffEditorPermissionMixin, generics.ListCreateAPIView):
+class ProductListCreateAPIView(UserQuerySetMixin, IsStaffEditorPermissionMixin, generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
@@ -29,32 +29,33 @@ class ProductListCreateAPIView(IsStaffEditorPermissionMixin, generics.ListCreate
     def perform_create(self, serializer):
         title = serializer.validated_data.get('title')
         content = serializer.validated_data.get('content')
+        user = self.request.user
         if content is None:
             content = title
-        serializer.save(content=title)
+        serializer.save(content=title, user=user)
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        request = self.request
-        user = request.user
-        if not user.is_authenticated:
-            return Product.objects.none
-        return qs.filter(user=user)
+    # def get_queryset(self):
+    #     # qs = super().get_queryset()
+    #     request = self.request
+    #     user = request.user
+    #     # if not user.is_authenticated:
+    #     #     return Product.objects.none
+    #     return Product.objects.filter(user=self.request.user)
 
 
-class ProductDetailAPIView(IsStaffEditorPermissionMixin, generics.RetrieveAPIView):
+class ProductDetailAPIView(UserQuerySetMixin, IsStaffEditorPermissionMixin, generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # lookup = 'pk'
 
 
-class ProductListAPIView(IsStaffEditorPermissionMixin, generics.ListAPIView):
+class ProductListAPIView(UserQuerySetMixin, IsStaffEditorPermissionMixin, generics.ListAPIView):
     """Listing instances along"""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 
-class ProductUpdateAPIView(IsStaffEditorPermissionMixin, generics.UpdateAPIView):
+class ProductUpdateAPIView(UserQuerySetMixin, IsStaffEditorPermissionMixin, generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
@@ -66,7 +67,7 @@ class ProductUpdateAPIView(IsStaffEditorPermissionMixin, generics.UpdateAPIView)
         if not instance.content:
             instance.content = instance.title
 
-class ProductDeleteAPIView(IsStaffEditorPermissionMixin, generics.DestroyAPIView):
+class ProductDeleteAPIView(UserQuerySetMixin, IsStaffEditorPermissionMixin, generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
