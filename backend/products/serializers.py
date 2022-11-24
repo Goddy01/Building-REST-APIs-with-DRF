@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 from .models import Product
 from .validators import validate_title_no_hello, unique_title_validator
-from api.serializers import UserPublicSerializer
+from api.serializers import UserPublicSerializer, UserProductInlineSerializer
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -15,10 +15,11 @@ class ProductSerializer(serializers.ModelSerializer):
         view_name='product-detail',
         lookup_field = 'pk'
     )
+    related_fields = UserProductInlineSerializer(many=True, source='user.product_set.all', read_only=True)
     # name = serializers.CharField(source='title', read_only=True)
     class Meta:
         model = Product
-        fields = ['user', 'pk', 'url', 'edit_url', 'email', 'title', 'content', 'price', 'sale_price', 'my_discount', 
+        fields = ['user', 'pk', 'url', 'edit_url', 'email', 'title', 'content', 'price', 'sale_price', 'my_discount', 'related_fields'
         # 'name'
         ]
 
