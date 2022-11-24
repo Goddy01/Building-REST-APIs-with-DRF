@@ -19,8 +19,7 @@ class ProductSerializer(serializers.ModelSerializer):
     # name = serializers.CharField(source='title', read_only=True)
     class Meta:
         model = Product
-        fields = ['user', 'pk', 'url', 'edit_url', 'title', 'content', 'price', 'sale_price',
-        ]
+        fields = ['user', 'pk', 'url', 'edit_url', 'title', 'content', 'price', 'sale_price', 'public']
 
     # Custom Validation wih Serializer (1)
     # def validate_title(self, value):

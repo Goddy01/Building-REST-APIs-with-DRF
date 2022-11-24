@@ -76,6 +76,23 @@ class ProductDeleteAPIView(UserQuerySetMixin, IsStaffEditorPermissionMixin, gene
         # Whatever logic necessary
         return super().perform_destroy(instance)
 
+
+
+class SearchListAPIView(generics.ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        q = self.request.GET.get('q')
+        results = Product.objects.none()
+        if q is not None:
+            user = None
+            if self.request.user.is_authenticated:
+                user = self.request.user
+            results = qs.search(q, user=user)
+        return results
+
 class ProductMixinView(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.GenericAPIView):
     """
     Mixins are classes that contan combination of methods from other classes. They inherit from other classes
