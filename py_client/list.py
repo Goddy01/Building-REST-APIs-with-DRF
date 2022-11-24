@@ -16,6 +16,15 @@ if get_auth_response.status_code == 200:
     endpoint = 'http://localhost:8000/api/products/list/'
 
     get_response = requests.get(endpoint, headers=headers)
-    print(get_response.json())
+    data = (get_response.json())
+    next_url = data['next']
+    if next_url is not None:
+        print('next_url: ', next_url)
+    previous_url = data['previous']
+    if previous_url is not None:
+        print('previous_url: ', previous_url)
+    results = data['results']
+    print('results: ', results)
+
 else:
     print('Wrong login details provided!!!')
