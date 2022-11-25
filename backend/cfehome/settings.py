@@ -22,7 +22,7 @@ load_dotenv(find_dotenv())
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -140,7 +140,7 @@ REST_FRAMEWORK = {
 
 
 ALGOLIA = {
-    'APPLICATION_ID': str(os.getenv('APPLICATION_ID')),
-    'API_KEY': str(os.getenv('API_KEY')),
-    'INDEX_PREFIX': str(os.getenv('INDEX_PREFIX')),
+    'APPLICATION_ID': os.environ.get('APPLICATION_ID'),
+    'API_KEY': os.environ.get('API_KEY'),
+    'INDEX_PREFIX': os.environ.get('INDEX_PREFIX'),
 }
